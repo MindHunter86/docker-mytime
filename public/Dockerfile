@@ -19,17 +19,17 @@ RUN mkdir -pm0700 /usr/src/mytime
 WORKDIR /usr/src/mytime
 
 # download and unpack mytime release:
-RUN curl -LSs ${MYTIME_RELEASE_URL} | tar xvC .
+RUN apk add --no-cache curl \
+	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
 
-# npm install:
-RUN npm i
+# remove all backend files:
+RUN rm -vfr views *.js *.json
 
-# remove package metadata files for production:
-RUN rm -vf package.json \
-	&& rm -vf package-lock.json
-
-# prepare additional directories:
-RUN mkdir -pm0700 cache
+# fix permissions:
+RUN apk add --no-cache findutils \
+	&& find . -type f -exec chmod 0444 {} \; \
+	&& find . -type d -exec chmod 0111 {} \; \
+	&& apk del findutils
 
 
 ## RELEASE:
@@ -37,25 +37,18 @@ FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
 ARG MYTIME_SITE_DIR
-
-# create site dir:
-RUN mkdir -pm0111 $MYTIME_SITE_DIR
+ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 WORKDIR $MYTIME_SITE_DIR
 
-# copy only public files:
-RUN mkdir -pm0111 ${MYTIME_SITE_DIR}/public
-COPY --from=0 /usr/src/mytime/public ${MYTIME_SITE_DIR}/public
+# copy files:
+COPY --chown=root:root --from=0 /usr/src/mytime/ $MYTIME_SITE_DIR
 
-# install some utils and fix permissions:
-RUN apk add --no-cache tzdata findutils \
-	&& find . -type f -exec chmod 0444 {} \; \
-	&& find . -type d -exec chmod 0111 {} \; \
-	&& apk del findutils
+# MYTIME_SITE_DIR files listing for debugging:
+RUN ls -la $MYTIME_SITE_DIR
 
-# publish mytime public dir for static serve:
-VOLUME ${MYTIME_SITE_DIR}/public
+STOPSIGNAL SIGKILL
 
-# run dummy command for public: 
-CMD [ "tail", "-F", "/dev/null" ]
+# run backend: 
+CMD ["cat", "/dev/stdout"]
 

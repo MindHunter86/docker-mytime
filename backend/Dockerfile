@@ -66,7 +66,7 @@ COPY --chown=root:w3mytime --from=0 /usr/src/mytime/ $MYTIME_SITE_DIR
 # remove public and bot files:
 RUN rm -rf public bot.js
 
-# DEBUG XXX 2DELETE
+# MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
 
 # create log dir: XXX - log dir used only with forever
@@ -80,6 +80,5 @@ EXPOSE 8080
 USER w3mytime:w3mytime
 
 # run backend: 
-# CMD [ "node", "${MYTIME_SITE_DIR}/app.js"] 
 CMD node ${MYTIME_SITE_DIR}/app.js
 
