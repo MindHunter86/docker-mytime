@@ -64,7 +64,7 @@ WORKDIR $MYTIME_SITE_DIR
 COPY --chown=root:w3mytime --from=0 /usr/src/mytime/ $MYTIME_SITE_DIR
 
 # remove public and bot files:
-RUN rm -rf public bot.js
+RUN rm -vrf public bot.js
 
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
