@@ -19,7 +19,12 @@ RUN mkdir -pm0700 /usr/src/mytime
 WORKDIR /usr/src/mytime
 
 # download and unpack mytime release:
-RUN curl -LSs ${MYTIME_RELEASE_URL} | tar xvC .
+RUN echo curl -LSs ${MYTIME_RELEASE_URL} tar zxvC .
+RUN apk add --no-cache curl \
+	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
+
+# install python for as npm plugin dependence:
+RUN apk add --no-cache build-base python
 
 # npm install:
 RUN npm i
@@ -28,8 +33,14 @@ RUN npm i
 RUN rm -vf package.json \
 	&& rm -vf package-lock.json
 
+# fix permissions:
+RUN apk add --no-cache findutils \
+	&& find . -type f -exec chmod 0440 {} \; \
+	&& find . -type d -exec chmod 2110 {} \; \
+	&& apk del findutils
+
 # prepare additional directories:
-RUN mkdir -pm0700 cache
+RUN mkdir -pm0170 cache
 
 
 ## RELEASE:
@@ -37,10 +48,11 @@ FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
 ARG MYTIME_SITE_DIR
+ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 # create mytime user/group:
-RUN addgroup -S w3mytime \
-	&& adduser -D -S -h $MYTIME_SITE_DIR -s /sbin/nologin -G w3mytime w3mytime
+RUN addgroup --system w3mytime \
+	&& adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin --ingroup w3mytime w3mytime
 
 # create site dir:
 RUN mkdir -pm0110 $MYTIME_SITE_DIR \
@@ -49,22 +61,17 @@ RUN mkdir -pm0110 $MYTIME_SITE_DIR \
 WORKDIR $MYTIME_SITE_DIR
 
 # copy files:
-COPY --from=0 /usr/src/mytime/ ${MYTIME_SITE_DIR}
+COPY --chown=root:w3mytime --from=0 /usr/src/mytime/ $MYTIME_SITE_DIR
 
 # remove public and bot files:
-RUN rm -rf public \
-	&& rm -f bot.js
+RUN rm -rf public bot.js
 
-# install some utils and fix permissions:
-RUN apk add --no-cache tzdata findutils \
-	&& find . -type f -exec chmod 0440 {} \; \
-	&& find . -type d -exec chmod 0110 {} \; \
-	&& chmod 0170 cache \
-	&& apk del findutils
+# DEBUG XXX 2DELETE
+RUN ls -la $MYTIME_SITE_DIR
 
-# create log dir:
-RUN mkdir -pm0170 /var/log/mytime \
-	&& chgrp w3mytime /var/log/mytime
+# create log dir: XXX - log dir used only with forever
+# RUN mkdir -pm0170 /var/log/mytime \
+#	&& chgrp w3mytime /var/log/mytime
 
 # expose backend port:
 EXPOSE 8080
@@ -73,5 +80,6 @@ EXPOSE 8080
 USER w3mytime:w3mytime
 
 # run backend: 
-CMD [ "node", "${MYTIME_SITE_DIR}/app.js"] 
+# CMD [ "node", "${MYTIME_SITE_DIR}/app.js"] 
+CMD node ${MYTIME_SITE_DIR}/app.js
 
