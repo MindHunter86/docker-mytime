@@ -26,7 +26,8 @@ RUN apk add --no-cache build-base python
 RUN npm i
 
 # remove package metadata files for production:
-RUN rm -vf package{,-lock}.json
+RUN rm -vf package.json \
+	&& rm -vf package-lock.json
 
 # prepare additional directories:
 RUN mkdir -pm0170 cache
