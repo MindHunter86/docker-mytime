@@ -1,53 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim: ft=Dockerfile
 
-# mytime-backend deploy Dockerfile
-
-ARG MYTIME_RELEASE_URL=https://example.com
-ARG MYTIME_SITE_DIR=/srv/mytime
-
-## BUILDER:
-FROM node:10-alpine
-LABEL maintainer="vkom <admin@mh00p.net"
-
-ARG MYTIME_RELEASE_URL
-ARG MYTIME_SITE_DIR
-
-# prepare build directory:
-RUN mkdir -pm0700 /usr/src/mytime
-
-WORKDIR /usr/src/mytime
-
-# download and unpack mytime release:
-RUN echo curl -LSs ${MYTIME_RELEASE_URL} tar zxvC .
-RUN apk add --no-cache curl \
-	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
-
-# install python for as npm plugin dependence:
-RUN apk add --no-cache build-base python
-
-# npm install:
-RUN npm i
-
-# remove package metadata files for production:
-RUN rm -vf package.json \
-	&& rm -vf package-lock.json
-
-# fix permissions:
-RUN apk add --no-cache findutils \
-	&& find . -type f -exec chmod 0440 {} \; \
-	&& find . -type d -exec chmod 2110 {} \; \
-	&& apk del findutils
-
-# prepare additional directories:
-RUN mkdir -pm0170 cache
-
-
-## RELEASE:
+# mytime deploy Dockerfile - backend
 FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
-ARG MYTIME_SITE_DIR
+ARG MYTIME_GLOB_VERSION 20190101.0101
+ARG MYTIME_SITE_DIR /srv/mytime
+
 ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 # create mytime user/group:
@@ -61,7 +21,7 @@ RUN mkdir -pm0110 $MYTIME_SITE_DIR \
 WORKDIR $MYTIME_SITE_DIR
 
 # copy files:
-COPY --chown=root:w3mytime --from=0 /usr/src/mytime/ $MYTIME_SITE_DIR
+COPY --chown=root:w3mytime --from=mytime-base:${MYTIME_GLOB_VERSION} /usr/src/mytime/ $MYTIME_SITE_DIR
 
 # remove public and bot files:
 RUN rm -vrf public bot.js
@@ -81,4 +41,3 @@ USER w3mytime:w3mytime
 
 # run backend: 
 CMD node ${MYTIME_SITE_DIR}/app.js
-
