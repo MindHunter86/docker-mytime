@@ -2,13 +2,20 @@
 # vim: ft=Dockerfile
 
 # mytime deploy Dockerfile - backend
+
+ARG MYTIME_BASE_IMAGE="registry.is-docker.mh00p.net/mytime-base:latest"
+ARG MYTIME_SITE_DIR="/srv/mytime"
+
+# fucking hacks for docker COPY --from =(
+# https://github.com/moby/moby/issues/34482
+FROM $MYTIME_BASE_IMAGE as source
+
 FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
-ARG MYTIME_GLOB_VERSION
+# env for cmd exec:
 ARG MYTIME_SITE_DIR
-
-ENV MYTIME_SITE_DIR /srv/mytime
+ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 # create mytime user/group:
 RUN addgroup --system w3mytime \
@@ -21,7 +28,7 @@ RUN mkdir -pm0110 $MYTIME_SITE_DIR \
 WORKDIR $MYTIME_SITE_DIR
 
 # copy files:
-COPY --chown=root:w3mytime --from=mytime-base:${MYTIME_GLOB_VERSION} /usr/src/mytime/ $MYTIME_SITE_DIR
+COPY --chown=root:w3mytime --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
 
 # remove public and bot files:
 RUN rm -vrf public bot.js
