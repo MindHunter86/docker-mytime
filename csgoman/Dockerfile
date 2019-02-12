@@ -15,23 +15,16 @@ RUN mkdir -pm0700 /usr/src/mytime
 
 WORKDIR /usr/src/mytime
 
-# download and unpack mytime release:
-RUN apk add --no-cache curl \
-	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
-
 # install python for as npm plugin dependence:
 RUN apk add --no-cache build-base python
 
-# use release tar archive:
-ADD dist.tar
+# unpack release tar archive and npm install:
+ADD dist.tar .
 
-# unpack sources and npm install:
-RUN tar zxvC . -f dist.tar \
-	&& npm i
+RUN npm i
 
 # remove source archive and package metadata files for production:
-RUN rm -vf dist.tar \
-	&& rm -vf package.json package-lock.json
+RUN rm -vf package.json package-lock.json
 
 # fix permissions:
 RUN apk add --no-cache findutils \
@@ -62,7 +55,7 @@ RUN mkdir -pm0110 $MYTIME_SITE_DIR \
 WORKDIR $MYTIME_SITE_DIR
 
 # copy files:
-COPY --chown=root:w3mytime --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
+COPY --chown=root:w3mytime --from=base /usr/src/mytime/ $MYTIME_SITE_DIR
 
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
