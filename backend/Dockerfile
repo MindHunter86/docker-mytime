@@ -5,10 +5,10 @@
 FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
-ARG MYTIME_GLOB_VERSION 20190101.0101
-ARG MYTIME_SITE_DIR /srv/mytime
+ARG MYTIME_GLOB_VERSION
+ARG MYTIME_SITE_DIR
 
-ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
+ENV MYTIME_SITE_DIR /srv/mytime
 
 # create mytime user/group:
 RUN addgroup --system w3mytime \
