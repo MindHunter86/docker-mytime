@@ -1,54 +1,43 @@
 # -*- coding: utf-8 -*-
 # vim: ft=Dockerfile
 
-# mytime-public deploy Dockerfile
+# mytime deploy Dockerfile - public
 
-ARG MYTIME_RELEASE_URL=https://example.com
-ARG MYTIME_SITE_DIR=/srv/mytime
+ARG MYTIME_BASE_IMAGE="registry.is-docker.mh00p.net/mytime-base:latest"
+ARG MYTIME_SITE_DIR="/srv/mytime"
 
-## BUILDER:
-FROM node:10-alpine
-LABEL maintainer="vkom <admin@mh00p.net"
+# fucking hacks for docker COPY --from =(
+# https://github.com/moby/moby/issues/34482
+FROM $MYTIME_BASE_IMAGE as source
 
-ARG MYTIME_RELEASE_URL
-ARG MYTIME_SITE_DIR
-
-# prepare build directory:
-RUN mkdir -pm0700 /usr/src/mytime
-
-WORKDIR /usr/src/mytime
-
-# download and unpack mytime release:
-RUN apk add --no-cache curl \
-	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
-
-# remove all backend files:
-RUN rm -vfr views *.js *.json
-
-# fix permissions:
-RUN apk add --no-cache findutils \
-	&& find . -type f -exec chmod 0444 {} \; \
-	&& find . -type d -exec chmod 0111 {} \; \
-	&& apk del findutils
-
-
-## RELEASE:
 FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
+# env for cmd exec:
 ARG MYTIME_SITE_DIR
-ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
+
+# create site dir:
+RUN mkdir -pm0111 $MYTIME_SITE_DIR
 
 WORKDIR $MYTIME_SITE_DIR
 
 # copy files:
-COPY --chown=root:root --from=0 /usr/src/mytime/ $MYTIME_SITE_DIR
+COPY --chown=root:root --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
+
+# fix permissions for anonymous users: XXX FIXME - remove --X for folders in workdir!!
+RUN chmod o+rx $MYTIME_SITE_DIR
+
+# remove public and bot files:
+RUN rm -vrf cache views node_modules app.js bot.js
 
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
 
+# create log dir: XXX - log dir used only with forever
+# RUN mkdir -pm0170 /var/log/mytime \
+#	&& chgrp w3mytime /var/log/mytime
+
 STOPSIGNAL SIGKILL
 
-# run backend: 
+# run dummy cmd for public serve:
 CMD ["cat", "/dev/stdout"]
-
