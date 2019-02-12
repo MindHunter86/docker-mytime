@@ -2,7 +2,6 @@
 # vim: ft=Dockerfile
 
 # mytime deploy Dockerfile - csgoman
-
 ARG MYTIME_SITE_DIR="/srv/mytime"
 
 

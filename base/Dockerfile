@@ -2,9 +2,6 @@
 # vim: ft=Dockerfile
 
 # mytime deploy Dockerfile - base
-
-
-## BUILDER:
 FROM node:10-alpine
 LABEL maintainer="vkom <admin@mh00p.net"
 

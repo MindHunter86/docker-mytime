@@ -2,13 +2,14 @@
 # vim: ft=Dockerfile
 
 # mytime deploy Dockerfile - backend
-
 ARG MYTIME_BASE_IMAGE="registry.is-docker.mh00p.net/mytime-base:latest"
 ARG MYTIME_SITE_DIR="/srv/mytime"
+
 
 # fucking hacks for docker COPY --from =(
 # https://github.com/moby/moby/issues/34482
 FROM $MYTIME_BASE_IMAGE as source
+
 
 FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
