@@ -11,7 +11,7 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 FROM $MYTIME_BASE_IMAGE as source
 
 
-FROM node:10-slim
+FROM node:10-alpine
 LABEL maintainer="vkom <admin@mh00p.net"
 
 # env for cmd exec:
@@ -38,12 +38,10 @@ RUN rm -vrf public bot.js
 RUN ls -la $MYTIME_SITE_DIR
 
 # install csgocups requirements:
-RUN apt-get update \
-	&& apt-get install musl -y -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 \
-	&& apt-get clean all
+RUN apk add --no-cache musl
 
 # fix lib for musl:
-RUN ln -s /lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
+# RUN ln -s /lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1 - for debian based
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
