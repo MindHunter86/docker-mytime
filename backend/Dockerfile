@@ -51,7 +51,7 @@ RUN apk add --no-cache musl
 EXPOSE 8080
 
 # set user for next CMD instruction:
-# USER w3mytime:w3mytime
+USER w3mytime:w3mytime
 
 # run backend: 
 CMD node ${MYTIME_SITE_DIR}/app.js
