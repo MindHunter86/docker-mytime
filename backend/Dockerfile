@@ -11,7 +11,7 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 FROM $MYTIME_BASE_IMAGE as source
 
 
-FROM node:10-jessie
+FROM node:10-alpine
 LABEL maintainer="vkom <admin@mh00p.net"
 
 # env for cmd exec:
@@ -40,11 +40,8 @@ RUN rm -vrf public bot.js
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
 
-RUN apt-get update \
-	&& apt-get -y install strace
-
 # install csgocups requirements:
-# RUN apk add --no-cache musl libc6-compat
+RUN apk add --no-cache musl libc6-compat
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
@@ -54,7 +51,7 @@ RUN apt-get update \
 EXPOSE 8080
 
 # set user for next CMD instruction:
-# USER w3mytime:w3mytime
+USER w3mytime:w3mytime
 
 # run backend: 
 CMD node ${MYTIME_SITE_DIR}/app.js
