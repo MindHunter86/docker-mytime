@@ -37,6 +37,11 @@ RUN rm -vrf public bot.js
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
 
+# install csgocups requirements:
+RUN apt update \
+	&& apt install musl -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 \
+	&& apt clean all
+
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
 #	&& chgrp w3mytime /var/log/mytime
