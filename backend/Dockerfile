@@ -41,6 +41,9 @@ RUN ls -la $MYTIME_SITE_DIR
 RUN apt install musl -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 \
 	&& apt clean all
 
+# fix lib for musl:
+RUN ln -s /lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
+
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
 #	&& chgrp w3mytime /var/log/mytime
