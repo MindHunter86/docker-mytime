@@ -26,14 +26,14 @@ RUN npm i
 RUN rm -vf package.json \
 	&& rm -vf package-lock.json
 
-# prepare additional directories:
-RUN mkdir -pm0170 cache
-
 # fix permissions:
 RUN apk add --no-cache findutils \
 	&& find . -type f -exec chmod 0440 {} \; \
 	&& find . -type d -exec chmod 2150 {} \; \
 	&& apk del findutils
+
+# prepare additional directories:
+RUN mkdir -pm0170 cache
 
 # debug:
 RUN ls -la /usr/src/mytime

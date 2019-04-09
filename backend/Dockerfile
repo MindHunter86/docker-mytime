@@ -23,13 +23,16 @@ RUN addgroup --system w3mytime \
 	&& adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin --ingroup w3mytime w3mytime
 
 # create site dir:
-RUN mkdir -pm0110 $MYTIME_SITE_DIR \
+RUN mkdir -pm2110 $MYTIME_SITE_DIR \
 	&& chgrp w3mytime $MYTIME_SITE_DIR
 
 WORKDIR $MYTIME_SITE_DIR
 
 # copy files:
 COPY --chown=root:w3mytime --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
+
+# fix permissions after COPY for site dir:
+RUN chmod 2110 $MYTIME_SITE_DIR
 
 # remove public and bot files:
 RUN rm -vrf public bot.js
@@ -39,9 +42,6 @@ RUN ls -la $MYTIME_SITE_DIR
 
 # install csgocups requirements:
 RUN apk add --no-cache musl
-
-# fix lib for musl:
-# RUN ln -s /lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1 - for debian based
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
