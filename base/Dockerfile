@@ -17,7 +17,7 @@ RUN apk add --no-cache curl \
 	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
 
 # install python for as npm plugin dependence:
-RUN apk add --no-cache build-base python libc6-compat
+RUN apk add --no-cache build-base python
 
 # npm install:
 RUN npm i
