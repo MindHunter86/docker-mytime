@@ -2,7 +2,7 @@
 # vim: ft=Dockerfile
 
 # mytime deploy Dockerfile - base
-FROM node:10-jessie
+FROM node:10-alpine
 LABEL maintainer="vkom <admin@mh00p.net"
 
 ARG MYTIME_RELEASE_URL=https://example.com
@@ -13,11 +13,11 @@ RUN mkdir -pm0700 /usr/src/mytime
 WORKDIR /usr/src/mytime
 
 # download and unpack mytime release:
-RUN apt-get update \
-	&& apt-get install -y git-core curl build-essential openssl libssl-dev \
-	&& apt-get install -y curl findutils python
+RUN apk add --no-cache curl \
+	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
 
-RUN curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
+# install python for as npm plugin dependence:
+RUN apk add --no-cache build-base python libc6-compat
 
 # npm install:
 RUN npm i
@@ -27,8 +27,10 @@ RUN rm -vf package.json \
 	&& rm -vf package-lock.json
 
 # fix permissions:
-RUN find . -type f -exec chmod 0440 {} \; \
-	&& find . -type d -exec chmod 2150 {} \;
+RUN apk add --no-cache findutils \
+	&& find . -type f -exec chmod 0440 {} \; \
+	&& find . -type d -exec chmod 2150 {} \; \
+	&& apk del findutils
 
 # prepare additional directories:
 RUN mkdir -pm0170 cache

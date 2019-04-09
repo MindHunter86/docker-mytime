@@ -11,7 +11,7 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 FROM $MYTIME_BASE_IMAGE as source
 
 
-FROM node:10-alpine
+FROM node:10-jessie
 LABEL maintainer="vkom <admin@mh00p.net"
 
 # env for cmd exec:
@@ -41,7 +41,7 @@ RUN rm -vrf public bot.js
 RUN ls -la $MYTIME_SITE_DIR
 
 # install csgocups requirements:
-RUN apk add --no-cache musl libc6-compat
+# RUN apk add --no-cache musl libc6-compat
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
