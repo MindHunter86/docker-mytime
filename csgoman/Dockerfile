@@ -29,6 +29,7 @@ RUN rm -vf package.json package-lock.json
 RUN apk add --no-cache findutils \
 	&& find . -type f -exec chmod 0440 {} \; \
 	&& find . -type d -exec chmod 2110 {} \; \
+	&& find node_modules -type d -exec chmod g+r {} \; \
 	&& apk del findutils
 
 # debug:
@@ -36,7 +37,7 @@ RUN ls -la /usr/src/mytime
 
 
 # mytime deploy Dockerfile - release image
-FROM node:10-slim
+FROM node:10-alpine
 LABEL maintainer="vkom <admin@mh00p.net"
 
 # env for cmd exec:
@@ -48,7 +49,7 @@ RUN addgroup --system w3mytime \
 	&& adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin --ingroup w3mytime w3mytime
 
 # create site dir:
-RUN mkdir -pm0110 $MYTIME_SITE_DIR \
+RUN mkdir -pm2110 $MYTIME_SITE_DIR \
 	&& chgrp w3mytime $MYTIME_SITE_DIR
 
 WORKDIR $MYTIME_SITE_DIR
@@ -56,8 +57,16 @@ WORKDIR $MYTIME_SITE_DIR
 # copy files:
 COPY --chown=root:w3mytime --from=base /usr/src/mytime/ $MYTIME_SITE_DIR
 
+# fix permissions after COPY for site dir:
+RUN chmod 2110 $MYTIME_SITE_DIR
+
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
+
+# install tzdata and set Moscow timezone:
+RUN apk add --no-cache tzdata \
+	&& ls -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime \
+	&& echo 'Europe/Moscow' > /etc/timezone
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
