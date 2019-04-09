@@ -45,7 +45,7 @@ RUN apk add --no-cache musl
 
 # install tzdata and set Moscow timezone:
 RUN apk add --no-cache tzdata \
-	&& ls -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime \
+	&& ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime \
 	&& echo 'Europe/Moscow' > /etc/timezone
 
 # create log dir: XXX - log dir used only with forever
