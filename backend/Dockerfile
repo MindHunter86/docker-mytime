@@ -38,9 +38,9 @@ RUN rm -vrf public bot.js
 RUN ls -la $MYTIME_SITE_DIR
 
 # install csgocups requirements:
-RUN apt update \
-	&& apt install musl -y -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 \
-	&& apt clean all
+RUN apt-get update \
+	&& apt-get install musl -y -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 \
+	&& apt-get clean all
 
 # fix lib for musl:
 RUN ln -s /lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
