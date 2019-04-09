@@ -40,6 +40,9 @@ RUN rm -vrf public bot.js
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
 
+RUN apt-get update \
+	&& apt-get -y install strace
+
 # install csgocups requirements:
 # RUN apk add --no-cache musl libc6-compat
 
