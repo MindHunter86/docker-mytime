@@ -41,7 +41,7 @@ RUN rm -vrf public bot.js
 RUN ls -la $MYTIME_SITE_DIR
 
 # install csgocups requirements:
-RUN apk add --no-cache musl
+RUN apk add --no-cache musl libc6-compat
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
