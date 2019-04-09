@@ -11,7 +11,7 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 FROM $MYTIME_BASE_IMAGE as source
 
 
-FROM node:10-jessie
+FROM node:10-slim
 LABEL maintainer="vkom <admin@mh00p.net"
 
 # env for cmd exec:
@@ -51,7 +51,7 @@ RUN ls -la $MYTIME_SITE_DIR
 EXPOSE 8080
 
 # set user for next CMD instruction:
-USER w3mytime:w3mytime
+# USER w3mytime:w3mytime
 
 # run backend: 
 CMD node ${MYTIME_SITE_DIR}/app.js
