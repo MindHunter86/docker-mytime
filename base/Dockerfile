@@ -32,7 +32,7 @@ RUN mkdir -pm0170 cache
 # fix permissions:
 RUN apk add --no-cache findutils \
 	&& find . -type f -exec chmod 0440 {} \; \
-	&& find . -type d -exec chmod 2110 {} \; \
+	&& find . -type d -exec chmod 2150 {} \; \
 	&& apk del findutils
 
 # debug:
