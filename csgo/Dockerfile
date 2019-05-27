@@ -28,14 +28,17 @@ RUN mkdir ./chroot/bin \
 	&& mkdir ./chroot/etc \
 	&& mkdir ./chroot/proc \
 	&& mkdir ./chroot/root \
-	&& mkdir ./chroot/srv \
+	&& mkdir -p ./chroot/srv/steamcmd \
+	&& mkdir -p ./chroot/srv/csgo-ds \
 	&& ls -1 ./arch32src/*pkg.tar.xz | xargs -n1 | xargs -P3 -ri tar zxvC ./chroot -f {} \
 	&& cp -v /etc/resolv.conf ./chroot/etc \
 	&& ln -vs /bin/busybox ./chroot/bin/sh \
 	&& ln -vs /bin/busybox ./chroot/bin/ln
 
 RUN chroot ./chroot /bin/sh \
-	&& cd /srv && wget -qO steamcmd_linux.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz \
+	&& cd /srv/steamcmd && wget -qO steamcmd_linux.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz \
 	&& tar zxvC . -f steamcmd_linux.tar.gz \
-	&& ls -la
+	&& ls -la \
+	&& chown root: -R . && chmod 0500 steamcmd.sh \
+	&& ./steamcmd.sh +login anonymous +force_install_dir /srv/csgo-ds +app_update 740 validate +quit
 
