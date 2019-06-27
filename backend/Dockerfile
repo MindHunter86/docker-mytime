@@ -31,6 +31,9 @@ WORKDIR $MYTIME_SITE_DIR
 # copy files:
 COPY --chown=root:w3mytime --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
 
+# XXX - 2DELETE
+RUN touch is_master.flag
+
 # fix permissions after COPY for site dir:
 RUN chmod 2110 $MYTIME_SITE_DIR
 
