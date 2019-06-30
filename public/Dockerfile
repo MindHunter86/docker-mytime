@@ -41,4 +41,4 @@ RUN ls -la $MYTIME_SITE_DIR
 STOPSIGNAL SIGKILL
 
 # run dummy cmd for public serve:
-CMD ["sh", "-c", "'rm -rfv /media/mytime; cp -av /srv/mytime /media/mytime; cat -'"]
+CMD /bin/rm -rfv /media/mytime ; /bin/cp -av /srv/mytime /media/mytime ; cat -
