@@ -13,7 +13,7 @@ FROM $MYTIME_BASE_IMAGE as source
 
 
 FROM node:10-slim
-LABEL maintainer="vkom <admin@mh00p.net"
+LABEL maintainer="vkom <admin@mh00p.net>"
 
 # env for cmd exec:
 ARG MYTIME_SITE_DIR

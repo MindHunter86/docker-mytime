@@ -12,7 +12,7 @@ FROM $MYTIME_BASE_IMAGE as source
 
 
 FROM alpine:latest
-LABEL maintainer="vkom <admin@mh00p.net"
+LABEL maintainer="vkom <admin@mh00p.net>"
 
 # env for cmd exec:
 ARG MYTIME_SITE_DIR
