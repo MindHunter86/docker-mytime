@@ -35,7 +35,7 @@ COPY --chown=root:w3mytime --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
 RUN touch is_master.flag
 
 # fix permissions after COPY for site dir:
-RUN chmod 2110 $MYTIME_SITE_DIR
+RUN chmod 2777 $MYTIME_SITE_DIR
 
 # remove public and bot files:
 RUN rm -vrf public bot.js
