@@ -38,8 +38,8 @@ RUN chmod 2110 $MYTIME_SITE_DIR
 RUN rm -vrf public bot.js
 
 # messy code for nodejs backend index.html err fix
-RUN mkdir -vm 2110 public \
-	&& touch -m 0440 public/index.html
+# RUN mkdir -vm 2110 public \
+# 	&& touch -m 0440 public/index.html
 
 # MYTIME_SITE_DIR files listing for debugging:
 RUN ls -la $MYTIME_SITE_DIR
