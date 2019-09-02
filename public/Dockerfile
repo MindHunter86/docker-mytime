@@ -25,14 +25,11 @@ WORKDIR $MYTIME_SITE_DIR
 # copy files:
 COPY --chown=root:root --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
 
-# fix permissions for anonymous users: XXX FIXME - remove --X for folders in workdir!!
-RUN chmod o+rx $MYTIME_SITE_DIR
+# fix permissions for anonymous users:
+RUN chmod -R a=rX $AQUA_SITE_DIR
 
 # remove public and bot files:
 RUN rm -vrf cache views node_modules app.js bot.js
-
-# MYTIME_SITE_DIR files listing for debugging:
-RUN ls -la $MYTIME_SITE_DIR
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
