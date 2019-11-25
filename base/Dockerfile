@@ -13,7 +13,7 @@ RUN mkdir -pm0700 /usr/src/mytime
 WORKDIR /usr/src/mytime
 
 # download and unpack mytime release:
-RUN apk add --no-cache curl \
+RUN apk add --no-cache curl strace \
 	&& curl -LSs ${MYTIME_RELEASE_URL} | tar zxvC .
 
 # install python for as npm plugin dependence:
