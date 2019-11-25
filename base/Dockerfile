@@ -35,8 +35,5 @@ RUN apk add --no-cache findutils \
 # prepare additional directories:
 RUN mkdir -pm0170 cache
 
-# download CSGO prices:
-RUN curl -SsL http://beta.mh00.net:8080/BePHk/730.json > cache/730.json
-
 # debug:
 RUN ls -la /usr/src/mytime
