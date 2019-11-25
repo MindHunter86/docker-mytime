@@ -47,6 +47,9 @@ RUN ls -la $MYTIME_SITE_DIR
 # install csgocups requirements:
 RUN apk add --no-cache musl
 
+# install debug tools:
+RUN apk add --no-cache strace
+
 # install tzdata and set Moscow timezone:
 RUN apk add --no-cache tzdata \
 	&& ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime \
