@@ -2,7 +2,7 @@
 # vim: ft=Dockerfile
 
 # mytime deploy Dockerfile - base
-FROM node:10-alpine3.9
+FROM node:10-alpine
 LABEL maintainer="vkom <admin@mh00p.net>"
 
 ARG MYTIME_RELEASE_URL=https://example.com
