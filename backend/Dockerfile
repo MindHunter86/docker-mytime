@@ -11,7 +11,7 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 FROM $MYTIME_BASE_IMAGE as source
 
 
-FROM node:10-alpine
+FROM node:12-alpine
 LABEL maintainer="vkom <admin@mh00p.net>"
 
 # env for cmd exec:
