@@ -32,7 +32,7 @@ FROM node:16-alpine
 LABEL maintainer="mindhunter86 <admin@vkom.cc>"
 
 # env for cmd exec:
-ARG MYTIME_SITE_DIR
+ARG MYTIME_SITE_DIR="/srv/mytime"
 ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 WORKDIR $MYTIME_SITE_DIR
