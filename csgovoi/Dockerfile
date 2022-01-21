@@ -39,6 +39,7 @@ RUN set -e \
 
 # copy files from builder container
 COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/index.js ${MYTIME_SITE_DIR}/
+COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/package*.json ${MYTIME_SITE_DIR}/
 COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/src ${MYTIME_SITE_DIR}/src/
 COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/node_modules ${MYTIME_SITE_DIR}/node_modules/
 
