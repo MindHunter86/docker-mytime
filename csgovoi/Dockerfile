@@ -38,7 +38,9 @@ RUN set -e \
   && chmod 2110 $MYTIME_SITE_DIR
 
 # copy files from builder container
-COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/index.js /usr/src/mytime-csgovoi/node_modules/ /usr/src/mytime-csgovoi/src/ ${MYTIME_SITE_DIR}
+COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/index.js ${MYTIME_SITE_DIR}/
+COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/src ${MYTIME_SITE_DIR}/
+COPY --chown=root:w3mytime --from=builder /usr/src/mytime-csgovoi/node_modules ${MYTIME_SITE_DIR}/
 
 # debug
 RUN ls -la ${MYTIME_SITE_DIR}/
