@@ -11,7 +11,7 @@
 #		https://www.archlinux32.org/packages/
 
 FROM 10-alpine
-LABEL maintainer="vkom <admin@mh00p.net>"
+LABEL maintainer="vkom <admin@vkom.cc>"
 
 # busybox,glibc,tar download for future chroot:
 # http://pool.mirror.archlinux32.org/i686/community/busybox-1.30.1-1.0-i686.pkg.tar.xz

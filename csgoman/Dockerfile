@@ -7,7 +7,7 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 
 # mytime deploy Dockerfile - base image for csgoman
 FROM node:10-alpine as base
-LABEL maintainer="vkom <admin@mh00p.net>"
+LABEL maintainer="vkom <admin@vkom.cc>"
 
 # prepare build directory:
 RUN mkdir -pm0700 /usr/src/mytime
@@ -38,7 +38,7 @@ RUN ls -la /usr/src/mytime
 
 # mytime deploy Dockerfile - release image
 FROM node:10-alpine
-LABEL maintainer="vkom <admin@mh00p.net>"
+LABEL maintainer="vkom <admin@vkom.cc>"
 
 # env for cmd exec:
 ARG MYTIME_SITE_DIR

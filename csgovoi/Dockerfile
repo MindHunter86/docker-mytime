@@ -1,7 +1,7 @@
 # Dockerfile : MyTime csgovoi
 
 FROM node:16-alpine as builder
-LABEL maintainer="mindhunter86 <admin@mh00p.net>"
+LABEL maintainer="mindhunter86 <admin@vkom.cc>"
 
 ARG MYTIME_RELEASE_URL=https://example.com
 
@@ -32,7 +32,7 @@ RUN ls -la /usr/src/mytime
 
 
 FROM node:16-alpine
-LABEL maintainer="mindhunter86 <admin@mh00p.net>"
+LABEL maintainer="mindhunter86 <admin@vkom.cc>"
 
 # env for cmd exec:
 ARG MYTIME_SITE_DIR

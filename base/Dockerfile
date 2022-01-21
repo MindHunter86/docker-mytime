@@ -3,7 +3,7 @@
 
 # mytime deploy Dockerfile - base
 FROM node:16-alpine
-LABEL maintainer="vkom <admin@mh00p.net>"
+LABEL maintainer="vkom <admin@vkom.cc>"
 
 ARG MYTIME_RELEASE_URL=https://example.com
 
