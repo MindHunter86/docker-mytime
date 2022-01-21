@@ -5,7 +5,10 @@ LABEL maintainer="mindhunter86 <admin@vkom.cc>"
 
 ARG MYTIME_RELEASE_URL=https://example.com
 
-WORKDIR /usr/src/mytime-csgovoi
+ADD . /usr/src/mytime-csgovoi/
+WORKDIR /usr/src/mytime-csgovoi/
+
+RUN ls -la /usr/src/mytime-csgovoi/
 
 # download and unpack mytime release:
 RUN apk add --no-cache curl \
@@ -14,12 +17,6 @@ RUN apk add --no-cache curl \
 
 # project build instructions:
 RUN npm install -g yarn && yarn
-
-RUN rm -rvf package*.json *md .git* bin
-
-# remove package metadata files for production:
-RUN rm -vf package.json \
-	&& rm -vf package-lock.json
 
 # fix permissions:
 RUN apk add --no-cache findutils \
