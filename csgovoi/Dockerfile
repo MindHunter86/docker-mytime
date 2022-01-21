@@ -48,4 +48,4 @@ RUN ls -la ${MYTIME_SITE_DIR}/
 EXPOSE 6464
 USER w3mytime:w3mytime
 
-CMD ["yarn", "start"]
+CMD ["node", "index"]
