@@ -8,8 +8,6 @@ ARG MYTIME_RELEASE_URL=https://example.com
 ADD . /usr/src/mytime-csgovoi/
 WORKDIR /usr/src/mytime-csgovoi/
 
-RUN ls -la /usr/src/mytime-csgovoi/
-
 # project build instructions:
 RUN yarn
 
@@ -20,7 +18,7 @@ RUN apk add --no-cache findutils \
 	&& apk del findutils
 
 # debug:
-RUN ls -la /usr/src/mytime
+RUN ls -la /usr/src/mytime-csgovoi/
 
 
 FROM node:16-alpine
