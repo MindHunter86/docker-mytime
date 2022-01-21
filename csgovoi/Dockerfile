@@ -11,7 +11,7 @@ WORKDIR /usr/src/mytime-csgovoi/
 RUN ls -la /usr/src/mytime-csgovoi/
 
 # project build instructions:
-RUN npm install -g yarn && yarn
+RUN yarn
 
 # fix permissions:
 RUN apk add --no-cache findutils \
