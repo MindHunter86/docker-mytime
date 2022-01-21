@@ -10,11 +10,6 @@ WORKDIR /usr/src/mytime-csgovoi/
 
 RUN ls -la /usr/src/mytime-csgovoi/
 
-# download and unpack mytime release:
-RUN apk add --no-cache curl \
-	&& curl -fq -SsL ${MYTIME_RELEASE_URL} | tar zxvC . \
-  && apk del curl
-
 # project build instructions:
 RUN npm install -g yarn && yarn
 
