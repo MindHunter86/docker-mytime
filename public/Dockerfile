@@ -47,6 +47,8 @@ COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 RUN apk add --no-cache brotli libwebp-tools findutils
 
+RUN ls -la
+
 # brotli compressing
 RUN find js/ css/ -type f -exec echo brotli -kf {} \;
 
