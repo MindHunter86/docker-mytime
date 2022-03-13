@@ -59,7 +59,7 @@ RUN adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin
 
 # debug
 RUN ls -la .
-RUN ls -la thhtpd
+RUN ls -la thttpd
 RUN ls -la /etc/passwd ; cat /etc/passwd
 RUN thhtpd/thttpd --help
 RUN pwd
