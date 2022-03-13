@@ -58,11 +58,11 @@ RUN cd thttpd \
 RUN adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin w3mytime
 
 # debug
-RUN ls -la .
-RUN ls -la thttpd
-RUN ls -la /etc/passwd ; cat /etc/passwd
-RUN pwd
-RUN thttpd/thttpd --help
+# RUN ls -la .
+# RUN ls -la thttpd
+# RUN ls -la /etc/passwd ; cat /etc/passwd
+# RUN pwd
+# RUN thttpd/thttpd --help
 
 
 # final image for mytime static serving
@@ -75,6 +75,10 @@ WORKDIR $MYTIME_SITE_DIR
 # thttpd
 COPY --chown=root:root --from=thttpd /etc/passwd /etc/passwd
 COPY --chown=root:root --from=thttpd /usr/src/thttpd/thttpd /
+
+RUN ls -la /
+RUN cat /etc/passwd
+RUN /thttpd --help
 
 # mytime
 # TODO : maybe this shit is needed in optimizations with .dockerignore file =)
