@@ -39,7 +39,7 @@ LABEL maintainer="vkom <admin@vkom.cc>"
 ARG MYTIME_SITE_DIR
 WORKDIR $MYTIME_SITE_DIR
 
-COPY --chown=root:root --from=cleaner /usr/src/mytime/ $MYTIME_SITE_DIR
+COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 STOPSIGNAL SIGKILL
 
