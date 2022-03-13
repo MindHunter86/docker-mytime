@@ -50,6 +50,7 @@ RUN apk add --no-cache brotli libwebp-tools findutils
 RUN ls -la
 
 # brotli compressing
+# TODO remove source files
 RUN find public/js/ public/css/ -type f -exec brotli -kf {} \;
 
 # make webp image copy (png + jpeg only)
