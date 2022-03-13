@@ -41,16 +41,15 @@ LABEL maintainer="vkom <admin@vkom.cc>"
 
 ARG THTTPD_VERSION
 ARG MYTIME_SITE_DIR
-WORKDIR /usr/src/thttpd
+WORKDIR /usr/src
 
 # Install all dependencies required for compiling thttpd
 # Download thttpd sources
 # Compile thttpd to a static binary which we can copy around
 RUN apk add gcc musl-dev make
-RUN wget http://www.acme.com/software/thttpd/thttpd-${THTTPD_VERSION}.tar.gz \
-  && tar xzf thttpd-${THTTPD_VERSION}.tar.gz \
-  && mv /thttpd-${THTTPD_VERSION} /thttpd
-RUN cd /thttpd \
+RUN wget -qO- http://www.acme.com/software/thttpd/thttpd-${THTTPD_VERSION}.tar.gz | tar zxvC . \
+  && mv thttpd-${THTTPD_VERSION} thttpd
+RUN cd thttpd \
   && ./configure \
   && make CCOPT='-O2 -s -static' thttpd
 
@@ -68,7 +67,7 @@ WORKDIR $MYTIME_SITE_DIR
 
 # thttpd
 COPY --from=thttpd /etc/passwd /etc/passwd
-COPY --from=thttpd /thttpd/thttpd /
+COPY --from=thttpd /usr/src/thttpd/thttpd /
 
 # mytime
 COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
