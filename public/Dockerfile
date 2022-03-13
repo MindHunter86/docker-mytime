@@ -57,6 +57,12 @@ RUN cd thttpd \
 # Create a non-root user to own the files and run our server
 RUN adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin w3mytime
 
+# debug
+RUN ls -la .
+RUN ls -la /etc/passwd ; cat /etc/passwd
+RUN thttpd --help
+RUN pwd
+
 
 # final image for mytime static serving
 FROM scratch
@@ -66,8 +72,8 @@ ARG MYTIME_SITE_DIR
 WORKDIR $MYTIME_SITE_DIR
 
 # thttpd
-COPY --from=thttpd /etc/passwd /etc/passwd
-COPY --from=thttpd /usr/src/thttpd/thttpd /
+COPY --chown=root:root --from=thttpd /etc/passwd /etc/passwd
+COPY --chown=root:root --from=thttpd /usr/src/thttpd/thttpd /
 
 # mytime
 # TODO : maybe this shit is needed in optimizations with .dockerignore file =)
