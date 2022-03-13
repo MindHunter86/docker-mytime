@@ -61,8 +61,8 @@ RUN adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin
 RUN ls -la .
 RUN ls -la thttpd
 RUN ls -la /etc/passwd ; cat /etc/passwd
-RUN thttpd/thttpd --help
 RUN pwd
+RUN thttpd/thttpd --help
 
 
 # final image for mytime static serving
