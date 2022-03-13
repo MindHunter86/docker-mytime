@@ -39,9 +39,7 @@ LABEL maintainer="vkom <admin@vkom.cc>"
 ARG MYTIME_SITE_DIR
 WORKDIR $MYTIME_SITE_DIR
 
-# create log dir: XXX - log dir used only with forever
-# RUN mkdir -pm0170 /var/log/mytime \
-#	&& chgrp w3mytime /var/log/mytime
+COPY --chown=root:root --from=cleaner /usr/src/mytime/ $MYTIME_SITE_DIR
 
 STOPSIGNAL SIGKILL
 
