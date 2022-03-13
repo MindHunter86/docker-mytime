@@ -33,6 +33,27 @@ RUN chmod -R a=rX $MYTIME_SITE_DIR \
   && chmod 0111 $MYTIME_SITE_DIR/public
 
 
+# brotli and 
+# use webp + brotli
+FROM alpine:latest as optimizer
+LABEL maintainer="vkom <admin@vkom.cc>"
+
+ARG MYTIME_SITE_DIR
+WORKDIR $MYTIME_SITE_DIR
+
+# mytime
+# TODO : maybe this shit is needed in optimizations with .dockerignore file =)
+COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
+
+RUN apk add --no-cache brotli libwebp-tools findutils
+
+# brotli compressing
+RUN find js/ css/ -type f -exec echo brotli -kf {} \;
+
+# make webp image copy (png + jpeg only)
+RUN find -type f -and \( -iname "*.png" -o -iname "*.jpg" \) -exec bash -c "echo {} | sed 's/\.[^.]*$/.webp/g' | cwebp {} -o \$(cat -)" \;
+
+
 # and one more hack for reducing image size with static file serving feature
 # there is building thttpd static binary for futher coping to "scratch" image.
 # ! use this web server only for internal file serving !
@@ -71,11 +92,12 @@ COPY --chown=root:root --from=thttpd /usr/src/thttpd/thttpd /
 
 # mytime
 # TODO : maybe this shit is needed in optimizations with .dockerignore file =)
-COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
+COPY --chown=root:root --from=optimizer $MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 USER w3mytime
 EXPOSE 3000
 
+# TODO add env variable for non-hardcode style
 CMD ["/thttpd", "-D", "-h", "0.0.0.0", "-p", "3000", "-d", "public", "-u", "w3mytime", "-l", "-", "-M", "60"]
 
 
