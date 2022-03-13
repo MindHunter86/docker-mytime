@@ -55,8 +55,7 @@ RUN cd thttpd \
   && make CCOPT='-O2 -s -static' thttpd
 
 # Create a non-root user to own the files and run our server
-RUN adduser -D w3mytime \
-  && adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin --ingroup w3mytime w3mytime
+RUN adduser --system --disabled-password --home "$MYTIME_SITE_DIR" --shell /sbin/nologin w3mytime
 
 
 # final image for mytime static serving
