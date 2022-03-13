@@ -63,7 +63,6 @@ FROM scratch
 LABEL maintainer="vkom <admin@vkom.cc>"
 
 ARG MYTIME_SITE_DIR
-ENV MYTIME_SITE_DIR $MYTIME_SITE_DIR
 WORKDIR $MYTIME_SITE_DIR
 
 # thttpd
@@ -77,7 +76,7 @@ COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
 USER w3mytime
 EXPOSE 3000
 
-CMD ["/thttpd", "-D", "-h", "0.0.0.0", "-p", "3000", "-d", "$MYTIME_SITE_DIR", "-u", "w3mytime", "-l", "-", "-M", "60"]
+CMD ["/thttpd", "-D", "-h", "0.0.0.0", "-p", "3000", "-d", "public", "-u", "w3mytime", "-l", "-", "-M", "60"]
 
 
 # THTTPD MANUAL:
