@@ -11,25 +11,33 @@ ARG MYTIME_SITE_DIR="/srv/mytime"
 FROM $MYTIME_BASE_IMAGE as source
 
 
+# so an another hack for excludes in COPY instruction
+# this hack helps to reduce image size by removing layer with "rm -rf command"
+# fucking hacks for fucking docker #2
+FROM busybox:latest as cleaner
+LABEL maintainer="vkom <admin@vkom.cc>"
+
+ARG MYTIME_SITE_DIR
+WORKDIR $MYTIME_SITE_DIR
+
+COPY --chown=root:root --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
+
+# remove backend, batch and bot files:
+RUN rm -vrf cache views node_modules app.js bot.js
+
+# fix permissions for anonymous users
+# and remove listing permissions for public:
+RUN chmod -R a=rX $MYTIME_SITE_DIR \
+  && chmod 0111 $MYTIME_SITE_DIR/public
+
+
+# working production image
 FROM alpine:latest
 LABEL maintainer="vkom <admin@vkom.cc>"
 
 # env for cmd exec:
 ARG MYTIME_SITE_DIR
-
-# create site dir:
-RUN mkdir -pm0111 $MYTIME_SITE_DIR
-
 WORKDIR $MYTIME_SITE_DIR
-
-# copy files:
-COPY --chown=root:root --from=source /usr/src/mytime/ $MYTIME_SITE_DIR
-
-# fix permissions for anonymous users:
-RUN chmod -R a=rX $MYTIME_SITE_DIR
-
-# remove public and bot files:
-RUN rm -vrf cache views node_modules app.js bot.js
 
 # create log dir: XXX - log dir used only with forever
 # RUN mkdir -pm0170 /var/log/mytime \
