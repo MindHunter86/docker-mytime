@@ -15,6 +15,7 @@ FROM $MYTIME_BASE_IMAGE as source
 # so an another hack for excludes in COPY instruction
 # this hack helps to reduce image size by removing layer with "rm -rf command"
 # fucking hacks for fucking docker #2
+# TODO : maybe this shit is needed in optimizations with .dockerignore file =)
 FROM busybox:latest as cleaner
 LABEL maintainer="vkom <admin@vkom.cc>"
 
@@ -70,6 +71,7 @@ COPY --from=thttpd /etc/passwd /etc/passwd
 COPY --from=thttpd /usr/src/thttpd/thttpd /
 
 # mytime
+# TODO : maybe this shit is needed in optimizations with .dockerignore file =)
 COPY --chown=root:root --from=cleaner $MYTIME_SITE_DIR $MYTIME_SITE_DIR
 
 USER w3mytime
