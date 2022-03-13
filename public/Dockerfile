@@ -50,11 +50,15 @@ RUN apk add --no-cache brotli libwebp-tools findutils
 RUN ls -la
 
 # brotli compressing
-RUN find public/js/ public/css/ -type f -exec echo brotli -kf {} \;
+RUN find public/js/ public/css/ -type f -exec brotli -kf {} \;
 
 # make webp image copy (png + jpeg only)
-RUN find -type f -and \( -iname "*.png" -o -iname "*.jpg" \) -exec bash -c "echo {} | sed 's/\.[^.]*$/.webp/g' | cwebp {} -o \$(cat -)" \;
+RUN find -type f -and \( -iname "*.png" -o -iname "*.jpg" \) -exec sh -c "echo {} | sed 's/\.[^.]*$/.webp/g' | cwebp {} -o \$(cat -)" \;
 
+RUN ls -la public
+RUN ls -la public/i
+RUN ls -la public/css
+RUN ls -la public/js
 
 # and one more hack for reducing image size with static file serving feature
 # there is building thttpd static binary for futher coping to "scratch" image.
