@@ -54,6 +54,7 @@ RUN ls -la
 RUN find public/js/ public/css/ -type f -exec brotli -kf {} \;
 
 # make webp image copy (png + jpeg only)
+# TODO not only jpg, add jpEg
 RUN find -type f -and \( -iname "*.png" -o -iname "*.jpg" \) -exec sh -c "echo {} | sed 's/\.[^.]*$/.webp/g' | cwebp {} -o \$(cat -)" \;
 
 RUN ls -la public
