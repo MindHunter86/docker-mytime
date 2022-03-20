@@ -80,7 +80,7 @@ RUN apk add gcc musl-dev make
 RUN wget -qO- http://www.acme.com/software/thttpd/thttpd-${THTTPD_VERSION}.tar.gz | tar zxvC . \
   && mv thttpd-${THTTPD_VERSION} thttpd
 RUN cd thttpd \
-  && echo -e 'webp\timage/webp' >> mime_types.txt \
+  && echo -e 'webp\timage/webp\nwoff2\tfont/woff2\nico\timage/x-icon' >> mime_types.txt \
   && ./configure \
   && make CCOPT='-O2 -s -static' thttpd
 
